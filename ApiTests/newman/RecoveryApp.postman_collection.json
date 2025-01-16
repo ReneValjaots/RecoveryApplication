@@ -1,0 +1,1114 @@
+{
+	"info": {
+		"_postman_id": "39476144-260e-4e5e-9709-d15a309f2366",
+		"name": "RecoveryApp",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38248307"
+	},
+	"item": [
+		{
+			"name": "PostRegister",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "*/*"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json-patch+json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"User111\",\n    \"email\": \"test1234@example.com\",\n    \"password\": \"User111\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/api/account/register",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"account",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PostLogin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Response contains token\", function () {\r",
+							"    var jsonData = pm.response.json(); \r",
+							"    pm.expect(jsonData).to.have.property('token'); \r",
+							"});\r",
+							"\r",
+							"if (pm.response.code === 200) {\r",
+							"    try {\r",
+							"        const jsonResponse = pm.response.json(); // Parse the response body as JSON\r",
+							"        console.log('Login response:', jsonResponse); // Log the response to debug if needed\r",
+							"\r",
+							"        // Assuming the token is in jsonResponse.token\r",
+							"        if (jsonResponse.token) {\r",
+							"            pm.environment.set('authToken', jsonResponse.token);\r",
+							"            console.log('Token saved to environment variable: authToken');\r",
+							"        } else {\r",
+							"            console.error('Token not found in the response.');\r",
+							"        }\r",
+							"    } catch (error) {\r",
+							"        console.error('Failed to parse JSON response:', error);\r",
+							"    }\r",
+							"} else if (pm.response.code === 401) {\r",
+							"    console.error('Unauthorized: Incorrect username or password.');\r",
+							"} else if (pm.response.code === 400) {\r",
+							"    console.error('Bad Request: Invalid login data.');\r",
+							"} else {\r",
+							"    console.error(`Unexpected status code: ${pm.response.code}`);\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"User111\",\r\n    \"email\": \"test1234@example.com\",\r\n    \"password\": \"User111\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/api/account/login",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"account",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetInjuries",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Injuries count is greater than 1\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseJson).to.be.an(\"array\").that.has.length.greaterThan(1);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{authToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/api/Injury",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"Injury"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetInjury",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Injuri name is Hamstring Strain\", function () {\r",
+							"\r",
+							"    const responseJson = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseJson.name).to.eql(\"Hamstring Strain\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{authToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"value": "*/*"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/api/Injury/1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"Injury",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetRecoveryExercises",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Recovery exercises count is greater than 1\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseJson).to.be.an(\"array\").that.has.length.greaterThan(1);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{authToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/api/recoveryexercise",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"recoveryexercise"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetRecoveryExercise",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Recovery exercise name is 'Hamstring Stretch'\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseJson.name).to.eql(\"Hamstring Stretch\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{authToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"value": "*/*"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/api/RecoveryExercise/1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"RecoveryExercise",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PostRecoveryPlan",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 201\", function () {\r",
+							"  pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{authToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "*/*"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json-patch+json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\"New Recovery Plan\"\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/api/RecoveryPlan",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"RecoveryPlan"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetRecoveryPlans",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{authToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/api/Recoveryplan",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"Recoveryplan"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetRecoveryPlan",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Recovery plan name is 'New Recovery Plan'\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.name).to.eql(\"New Recovery Plan\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{authToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/api/RecoveryPlan/1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"RecoveryPlan",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PutRecoveryPlan",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{authToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"dayNumber\": 1,\r\n  \"sets\": 5,\r\n  \"reps\": 12,\r\n  \"duration\": \"1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/api/RecoveryPlan/assign/1/1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"RecoveryPlan",
+						"assign",
+						"1",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PatchRecoveryPlan",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{authToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"dayNumber\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/api/RecoveryPlan/unlink/1/1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"RecoveryPlan",
+						"unlink",
+						"1",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetUserInjuries",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Response is an empty JSON object\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"\r",
+							"    pm.expect(Object.keys(responseJson)).to.have.lengthOf(0);\r",
+							"    pm.expect(responseJson).to.eql([]);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{authToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/api/userinjury/user/injuries",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"userinjury",
+						"user",
+						"injuries"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PutUserInjury",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"isTooSevere should be true\", function () {\r",
+							"    const response = pm.response.json();\r",
+							"    pm.expect(response.isTooSevere).to.eql(true);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{authToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "accept",
+						"value": "*/*"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"injuryId\": 1,\r\n  \"isTooSevere\": true\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/api/userinjury/assign",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"userinjury",
+						"assign"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PatchUserInjury",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{authToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "accept",
+						"value": "*/*"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/api/userinjury/unlink/1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"userinjury",
+						"unlink",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteRecoveryPlan",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 204\", function () {\r",
+							"  pm.response.to.have.status(204);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{authToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/api/RecoveryPlan/1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"RecoveryPlan",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetStatistics",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{authToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/api/Statistics/user/injury-history",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"Statistics",
+						"user",
+						"injury-history"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PostLoginDoctor",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Response contains token\", function () {\r",
+							"    var jsonData = pm.response.json(); \r",
+							"    pm.expect(jsonData).to.have.property('token'); \r",
+							"});\r",
+							"\r",
+							"if (pm.response.code === 200) {\r",
+							"    try {\r",
+							"        const jsonResponse = pm.response.json(); // Parse the response body as JSON\r",
+							"        console.log('Login response:', jsonResponse); // Log the response to debug if needed\r",
+							"\r",
+							"        // Assuming the token is in jsonResponse.token\r",
+							"        if (jsonResponse.token) {\r",
+							"            pm.environment.set('docToken', jsonResponse.token);\r",
+							"            console.log('Token saved to environment variable: docToken');\r",
+							"        } else {\r",
+							"            console.error('Token not found in the response.');\r",
+							"        }\r",
+							"    } catch (error) {\r",
+							"        console.error('Failed to parse JSON response:', error);\r",
+							"    }\r",
+							"} else if (pm.response.code === 401) {\r",
+							"    console.error('Unauthorized: Incorrect username or password.');\r",
+							"} else if (pm.response.code === 400) {\r",
+							"    console.error('Bad Request: Invalid login data.');\r",
+							"} else {\r",
+							"    console.error(`Unexpected status code: ${pm.response.code}`);\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"Doctor111\",\r\n    \"password\": \"Doctor111\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/api/account/login",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"account",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetDoctorInjuries",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 404\", function () {\r",
+							"  pm.response.to.have.status(404);\r",
+							"});\r",
+							"pm.test(\"Should return 'No severe injuries found.' if no severe injuries exist\", function () {\r",
+							"    const response = pm.response.text();\r",
+							"    pm.expect(response).to.eql(\"No severe injuries found.\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{docToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/api/doctor/injuries",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"doctor",
+						"injuries"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetDoctorPatients",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 404\", function () {\r",
+							"  pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{docToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/api/doctor/patients",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"doctor",
+						"patients"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetDoctorRecoveryPlan1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 404\", function () {\r",
+							"  pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{docToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/api/doctor/recovery-plan/1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"doctor",
+						"recovery-plan",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					"\r",
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
